@@ -12,6 +12,17 @@
       "name": "server",
       "image": "wayming/multi-server",
       "hostname": "api",
+      "environment": [
+        {
+          "REDIS_HOST": "redis",
+          "REDIS_PORT": "6379",
+          "PGUSER": "postgres",
+          "PGHOST": "postgres",
+          "PGDATABASE": "postgres",
+          "PGPASSWORD": "postgres_password",
+          "PGPORT": "5432"
+        }
+      ],
       "essential": false,
       "memory": 128
     },
