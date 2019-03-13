@@ -1,0 +1,35 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t wayming/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run wayming/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t wayming/multi-client ./client
+  - docker build -t wayming/multi-nginx ./nginx
+  - docker build -t wayming/multi-server ./server
+  - docker build -t wayming/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push wayming/multi-client
+  - docker push wayming/multi-nginx
+  - docker push wayming/multi-server
+  - docker push wayming/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: ap-southeast-2
+  app: docker-node
+  env: DockerNode-env
+  bucket_name: elb-docker-node
+  bucket_path: docker-node
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
