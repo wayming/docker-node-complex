@@ -21,6 +21,7 @@ after_success:
   - docker push wayming/multi-server
   - docker push wayming/multi-worker
 
+
 deploy:
   provider: elasticbeanstalk
   region: ap-southeast-2
