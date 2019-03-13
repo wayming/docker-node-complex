@@ -35,6 +35,34 @@
       ],
       "links": ["client", "server"],
       "memory": 128
+    },
+    {
+      "name": "postgres",
+      "image": "postgres:latest",
+      "hostname": "postgres",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 5432,
+          "containerPort": 5432
+        }
+      ],
+      "links": ["server", "worker"],
+      "memory": 128
+    },
+    {
+      "name": "redis",
+      "image": "redis:latest",
+      "hostname": "redis",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 6379,
+          "containerPort": 6379
+        }
+      ],
+      "links": ["server", "worker"],
+      "memory": 128
     }
   ]
 }
