@@ -26,7 +26,7 @@ deploy:
   provider: elasticbeanstalk
   region: ap-southeast-2
   app: docker-node
-  env: DockerNode-env
+  env: multi-container-env
   bucket_name: elb-docker-node
   bucket_path: docker-node
   on:
