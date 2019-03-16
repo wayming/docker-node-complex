@@ -27,8 +27,8 @@ deploy:
   region: ap-southeast-2
   app: complex-deployment
   env: complex-deployment-env
-  bucket_name: elb-docker-node
-  bucket_path: docker-node
+  bucket_name: elasticbeanstalk-ap-southeast-2-542553974399
+  bucket_path: complex-deployment
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY_ID
