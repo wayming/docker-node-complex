@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "client",
-      "image": "wayming/multi-client",
+      "image": "stephengrider/multi-client",
       "hostname": "client",
       "essential": false,
       "memory": 128
