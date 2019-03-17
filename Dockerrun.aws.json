@@ -13,14 +13,54 @@
       "image": "wayming/multi-server",
       "hostname": "api",
       "essential": false,
-      "memory": 128
+      "memory": 128,
+      "environment": [
+        {
+          "name": "REDIS_HOST",
+          "value": "redis"
+        },
+        {
+          "name": "REDIS_PORT",
+          "value": "6379"
+        },
+        {
+          "name": "PGUSER",
+          "value": "postgres"
+        },
+        {
+          "name": "PGHOST",
+          "value": "postgres"
+        },
+        {
+          "name": "PGDATABASE",
+          "value": "postgres"
+        },
+        {
+          "name": "PGPASSWORD",
+          "value": "postgres_password"
+        },
+        {
+          "name": "PGPORT",
+          "value": "5432"
+        }
+      ]
     },
     {
       "name": "worker",
       "image": "wayming/multi-worker",
       "hostname": "worker",
       "essential": false,
-      "memory": 128
+      "memory": 128,
+      "environment": [
+        {
+          "name": "REDIS_HOST",
+          "value": "redis"
+        },
+        {
+          "name": "REDIS_PORT",
+          "value": "6379"
+        }
+      ]
     },
     {
       "name": "nginx",
