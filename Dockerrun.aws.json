@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "client",
-      "image": "stephengrider/multi-client",
+      "image": "wayming/multi-client",
       "hostname": "client",
       "essential": false,
       "memory": 128
@@ -14,6 +14,7 @@
       "hostname": "api",
       "essential": false,
       "memory": 128,
+      "links": ["postgres", "redis"],
       "environment": [
         {
           "name": "REDIS_HOST",
@@ -51,6 +52,7 @@
       "hostname": "worker",
       "essential": false,
       "memory": 128,
+      "links": ["redis"],
       "environment": [
         {
           "name": "REDIS_HOST",
@@ -87,7 +89,6 @@
           "containerPort": 5432
         }
       ],
-      "links": ["server", "worker"],
       "memory": 128
     },
     {
@@ -101,7 +102,6 @@
           "containerPort": 6379
         }
       ],
-      "links": ["server", "worker"],
       "memory": 128
     }
   ]
