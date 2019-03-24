@@ -18,7 +18,7 @@
       "environment": [
         {
           "name": "REDIS_HOST",
-          "value": "complex-cache-001.imi7w8.0001.apse2.cache.amazonaws.com"
+          "value": "redis"
         },
         {
           "name": "REDIS_PORT",
@@ -30,7 +30,7 @@
         },
         {
           "name": "PGHOST",
-          "value": "postgres.csxncqsk2nul.ap-southeast-2.rds.amazonaws.com"
+          "value": "postgres"
         },
         {
           "name": "PGDATABASE",
@@ -76,6 +76,32 @@
         }
       ],
       "links": ["client", "server"],
+      "memory": 128
+    },
+    {
+      "name": "postgres",
+      "image": "postgres:latest",
+      "hostname": "postgres",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 5432,
+          "containerPort": 5432
+        }
+      ],
+      "memory": 128
+    },
+    {
+      "name": "redis",
+      "image": "redis:latest",
+      "hostname": "redis",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 6379,
+          "containerPort": 6379
+        }
+      ],
       "memory": 128
     }
   ]

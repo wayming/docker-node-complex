@@ -1,0 +1,22 @@
+version: '3'
+services:
+  pgadmin:
+    image: "dpage/pgadmin4"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=wayming.z@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres_password
+  api:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    environment:
+      - REDIS_HOST=complex-cache-001.imi7w8.0001.apse2.cache.amazonaws.com
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres.csxncqsk2nul.ap-southeast-2.rds.amazonaws.com
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
