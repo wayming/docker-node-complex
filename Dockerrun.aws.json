@@ -51,7 +51,6 @@
       "hostname": "worker",
       "essential": false,
       "memory": 128,
-      "links": ["redis"],
       "environment": [
         {
           "name": "REDIS_HOST",
