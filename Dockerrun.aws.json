@@ -54,7 +54,7 @@
       "environment": [
         {
           "name": "REDIS_HOST",
-          "value": "redis"
+          "value": "complex-cache-001.imi7w8.0001.apse2.cache.amazonaws.com"
         },
         {
           "name": "REDIS_PORT",
