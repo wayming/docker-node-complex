@@ -14,7 +14,6 @@
       "hostname": "api",
       "essential": false,
       "memory": 128,
-      "links": ["postgres", "redis"],
       "environment": [
         {
           "name": "REDIS_HOST",
