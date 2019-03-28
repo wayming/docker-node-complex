@@ -26,6 +26,18 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
+  api_go:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server_go
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
   client:
     build:
       dockerfile: Dockerfile.dev
