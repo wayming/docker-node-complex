@@ -15,21 +15,27 @@ services:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
+    depends_on:
+      - "postgres"
+      - "redis"
     volumes:
       - /app/node_modules
       - ./server:/app
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - PGUSER=postgres
       - PGHOST=postgres
-      - PGDATABASE=postgres
-      - PGPASSWORD=postgres_password
       - PGPORT=5432
+      - PGDATABASE=postgres
+      - PGUSER=postgres
+      - PGPASSWORD=postgres_password
   api_go:
     build:
       dockerfile: Dockerfile.dev
       context: ./server_go
+    depends_on:
+      - "postgres"
+      - "redis"
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
