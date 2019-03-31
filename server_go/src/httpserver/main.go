@@ -5,13 +5,45 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/httputil"
 	"os"
+	"strings"
 
 	"database/sql"
 
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
 )
+
+type RequestStructure struct {
+	Index string
+}
+
+func dumpHTTPRequest(r *http.Request) string {
+	// Create return string
+	var request []string
+	// Add the request string
+	url := fmt.Sprintf("%v %v %v", r.Method, r.URL, r.Proto)
+	request = append(request, url)
+	// Add the host
+	request = append(request, fmt.Sprintf("Host: %v", r.Host))
+	// Loop through headers
+	for name, headers := range r.Header {
+		name = strings.ToLower(name)
+		for _, h := range headers {
+			request = append(request, fmt.Sprintf("%v: %v", name, h))
+		}
+	}
+
+	// If this is a POST, add post data
+	if r.Method == "POST" {
+		r.ParseForm()
+		request = append(request, "\n")
+		request = append(request, r.Form.Encode())
+	}
+	// Return the request as a string
+	return strings.Join(request, "\n")
+}
 
 func main() {
 	connStr := "user=" + os.Getenv("PGUSER") +
@@ -88,13 +120,28 @@ func main() {
 	})
 
 	http.HandleFunc("/values", func(response http.ResponseWriter, request *http.Request) {
-		if err := request.ParseForm(); err != nil {
-			log.Print(err)
+
+		request.ParseForm()
+		log.Println(request.Form)
+
+		decoder := json.NewDecoder(request.Body)
+		var requestStructure RequestStructure
+		err := decoder.Decode(&requestStructure)
+		if err != nil {
+			log.Print("Decoding error " + err.Error())
 			return
 		}
-		var index string
+
+		log.Print("Request index: " + requestStructure.Index)
+
+		index := requestStructure.Index
 		if index = request.FormValue("index"); len(index) == 0 {
-			log.Print("invalid index" + index)
+			log.Print("invalid index")
+			dump, err := httputil.DumpRequestOut(request, true)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Fprintf(response, "%q", dump)
 			return
 		}
 		_, err = db.Exec("INSERT INTO values(number) VALUES (" + index + ")")
@@ -108,6 +155,7 @@ func main() {
 			log.Print(err)
 			return
 		}
+		redisClient.Publish("insert", index)
 
 		fmt.Fprintf(response, "inserted value "+index)
 	})

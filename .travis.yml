@@ -13,6 +13,8 @@ after_success:
   - docker build -t wayming/multi-nginx ./nginx
   - docker build -t wayming/multi-server ./server
   - docker build -t wayming/multi-worker ./worker
+  - docker build -t wayming/multi-server-go ./server_go
+  - docker build -t wayming/multi-worker-go ./worker_go
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
@@ -20,7 +22,8 @@ after_success:
   - docker push wayming/multi-nginx
   - docker push wayming/multi-server
   - docker push wayming/multi-worker
-
+  - docker push wayming/multi-server-go
+  - docker push wayming/multi-worker-go
 
 deploy:
   provider: elasticbeanstalk
