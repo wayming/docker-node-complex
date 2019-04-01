@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"strconv"
 
@@ -27,6 +28,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	log.Println("Calculating index " + msg.Payload)
 
 	index, err := strconv.Atoi(msg.Payload)
 	if err != nil {

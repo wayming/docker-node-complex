@@ -121,21 +121,19 @@ func main() {
 
 	http.HandleFunc("/values", func(response http.ResponseWriter, request *http.Request) {
 
-		request.ParseForm()
-		log.Println(request.Form)
+		// request.ParseForm()
+		// log.Println(request.Form)
 
 		decoder := json.NewDecoder(request.Body)
-		var requestStructure RequestStructure
-		err := decoder.Decode(&requestStructure)
+		var req RequestStructure
+		err := decoder.Decode(&req)
 		if err != nil {
 			log.Print("Decoding error " + err.Error())
 			return
 		}
+		log.Print("Request index: " + req.Index)
 
-		log.Print("Request index: " + requestStructure.Index)
-
-		index := requestStructure.Index
-		if index = request.FormValue("index"); len(index) == 0 {
+		if len(req.Index) == 0 {
 			log.Print("invalid index")
 			dump, err := httputil.DumpRequestOut(request, true)
 			if err != nil {
@@ -144,20 +142,20 @@ func main() {
 			fmt.Fprintf(response, "%q", dump)
 			return
 		}
-		_, err = db.Exec("INSERT INTO values(number) VALUES (" + index + ")")
+		_, err = db.Exec("INSERT INTO values(number) VALUES (" + req.Index + ")")
 		if err != nil {
 			log.Print(err)
 			return
 		}
 
-		cmd := redisClient.HSet("values", index, "Nothing yet")
+		cmd := redisClient.HSet("values", req.Index, "Nothing yet")
 		if cmd.Err() != nil {
 			log.Print(err)
 			return
 		}
-		redisClient.Publish("insert", index)
+		redisClient.Publish("insert", req.Index)
 
-		fmt.Fprintf(response, "inserted value "+index)
+		fmt.Fprintf(response, "inserted value "+req.Index)
 	})
 
 	http.ListenAndServe(":5000", nil)
